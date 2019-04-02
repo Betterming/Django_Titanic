@@ -1,0 +1,235 @@
+{% extends 'base_home.html' %}
+
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+{% block title %}主页{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+{#            <script src="{% static 'js/jquery-3.2.1/jquery-3.2.1.js' %}"></script>#}
+            <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+    <style>
+    .spinner {
+  width: 100px;
+}
+.spinner input {
+  text-align: right;
+}
+.input-group-btn-vertical {
+  position: relative;
+  white-space: nowrap;
+  width: 1%;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.btn{
+  display: inner-block;
+  padding: 5px;
+  border-radius: 1px;
+  cursor: pointer;
+}
+.pop{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform:  translate(-50%,-50%);
+  display: none;
+  padding: 10px;
+}
+.input-group-btn-vertical > .btn {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+  margin-left: -1px;
+  position: relative;
+  border-radius: 0;
+}
+.input-group-btn-vertical > .btn:first-child {
+  border-top-right-radius: 4px;
+}
+.input-group-btn-vertical > .btn:last-child {
+  margin-top: -2px;
+  border-bottom-right-radius: 4px;
+}
+.input-group-btn-vertical i{
+  position: absolute;
+  top: 0;
+  left: 4px;
+}
+    </style>
+<div class="container">
+    <h2 align="center"> Titanic 幸存者预测 </h2>
+
+    <div class="panel panel-default">
+            <div class="panel-heading"> 问题描述 </div>
+
+            <div class="panel-body">
+                <form role="form">
+                    <h3 class="dl-horizontal"> Competition Description </h3>
+                    <div >
+                        The sinking of the RMS Titanic is one of the most infamous shipwrecks in history.  On April 15, 1912, during her maiden voyage, the Titanic sank after colliding with an iceberg, killing 1502 out of 2224 passengers and crew. This sensational tragedy shocked the international community and led to better safety regulations for ships.
+                        One of the reasons that the shipwreck led to such loss of life was that there were not enough lifeboats for the passengers and crew. Although there was some element of luck involved in surviving the sinking, some groups of people were more likely to survive than others, such as women, children, and the upper-class.
+                        In this challenge, we ask you to complete the analysis of what sorts of people were likely to survive. In particular, we ask you to apply the tools of machine learning to predict which passengers survived the tragedy.
+                    </div>
+                    <br>
+                    <div>
+                       主要是根据训练集中的乘客数据和存活情况进行建模，进而使用模型预测测试集中的乘客是否会存活
+                    </div>
+                </form>
+            </div>
+    </div>
+
+    <div class="panel panel-default">
+            <div class="panel-heading"> 评价指标 </div>
+
+            <div class="panel-body">
+                <form role="form">
+                    <h3 class="dl-horizontal"> Goal </h3>
+                    <div >
+                        It is your job to predict if a passenger survived the sinking of the Titanic or not.
+                        For each in the test set, you must predict a 0 or 1 value for the variable.
+                    <h3 class="dl-horizontal"> Metric </h3>
+                        Your score is the percentage of passengers you correctly predict. This is known simply as "accuracy”.to survive. In particular, we ask you to apply the tools of machine learning to predict which passengers survived the tragedy.
+                    </div>
+                    <br>
+                    <div>
+                       根据所建立的模型，用测试集来预测存活情况，然后计算出准确度，从而评价模型的好坏。
+                    </div>
+                </form>
+            </div>
+    </div>
+
+    <div class="panel panel-default">
+            <div class="panel-heading"> 数据信息 </div>
+
+            <div class="panel-body">
+
+                    <h3 class="dl-horizontal"> 数据基本信息 </h3>
+                    <br>
+
+                    <div>
+                        <img style="height: 340px;" class="img-responsive" src="{% static "media/info.png" %}" />
+
+                        <div class="container-fluid">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="accordion" id="accordion-583429">
+
+                                        <div class="accordion-group">
+                                            <div class="accordion-heading">
+
+                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-583429" href="#accordion-element-557699">分析</a>
+                                            </div>
+                                            <div id="accordion-element-557699" class="accordion-body in collapse">
+                                                <div class="accordion-inner">
+
+                                                   <h5>共有12列数据：</h5>
+
+                                                <p>1)	PassengerId：乘客编号</p>
+                                                <p>2)	Survived：是否生存，1表生存，0表示遇难</p>
+                                                <p>3)	Pclass：舱位等级，分为一等舱、二等舱、三等舱</p>
+                                                <p>4)	Name：乘客姓名</p>
+                                                <p>5)	Sex：性别，Male或Female</p>
+                                                <p>6)	Age：年龄<p>
+                                                <p>7)	SibSp：兄弟姐妹、堂兄弟姐妹人数</p>
+                                                <p>8)	Parch：父母与子女个数</p>
+                                                <p>9)	Ticket：船票信息（上面记载着座位号）</p>
+                                                <p>10)	Fare：票价</p>
+                                                <p>11)	Cabin：客舱</p>
+                                                <p>12)	Embarked：登船港口</p>
+
+                                                <p>我们发现有一些列，比如说Cabin，有非常多的缺失值；另外一些我们感觉在此场景中会有影响的属性，比如Age，也有一些缺失值；这12列数据中，有9列数据是完整的，即有891条记录；Embarked这一列，数据缺失了两条； Age这一列，差了一百多条数据； Cabin这一列，数据很不完整，只有204条记录。</p>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <h3 class="dl-horizontal" > 数据的描述性统计 </h3>
+                                        <img style="height: 340px;" class="img-responsive" src="{% static "media/describe.png" %}" />
+
+                                        <div class="accordion-group">
+                                            <div class="accordion-heading">
+                                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-583429" href="#accordion-element-124311">分析</a>
+                                            </div>
+                                            <div id="accordion-element-124311" class="accordion-body collapse">
+                                                <div class="accordion-inner">
+                                                    <h5>简单分析：</h5>
+                                                    <p>（1）总共有12列数据，这里只列出了7列，为什么呢？ 因为Name、Ticket和Cabin是文本信息，Sex和Embarked是类目信息，无法统计出来。</p>
+                                                    <p>（2）pandas中的std为样本标准差。例：x = {1, 2, 3}，则平均数x’ = (1 + 2 + 3) / 3 = 2 样本方差（无偏）D = [abs(1 - 2) + abs(2 - 2) + abs(3 - 3)] / 2 = 1 样本标准差（无偏）= sqrt(D) = 1</p>
+                                                    <p>（3）仍以 x = {1, 2, 3}为例 min值 = 0%值 = 1 25%值 = 1.5 50%值 = 2 75%值 = 2.5 max值 = 100%值 = 3</p>
+                                                    <p>（4）计算mean的时候，会自动剔除没有记录的数据。以 x = {10, NaN, 20, NaN, 30}为例，平均值 = (10 + 20 + 30) / 3 = 20</p>
+                                                    <p>（5）从上表结果可以看出，生存率平均值为0.383838，说明遇难人数一大半；Pclass的平均值为2.3，说明坐3等舱的乘客居多，因为通常3等舱的价格最便宜舱位最多；平均年龄29.7岁，结合表格可以看出，很多成年人带了年幼的小孩，导致平均年龄较小。</p>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br>
+
+
+
+            </div>
+    </div>
+
+    <!-- <div class="panel panel-default">
+            <div class="panel-heading"> 逻辑回归模型学习曲线 </div>
+
+            <div class="panel-body">
+                <form role="form">
+
+                    <br>
+                    <div>
+
+{#                    <SCRIPT LANGUAGE="JavaScript">#}
+{#                    function reP(){#}
+{#                    document.getElementById('oImg').style.display = "block";#}
+{#                    }#}
+{#                    </SCRIPT>#}
+{##}
+{##}
+{#                    <img src='{% static "media/learn_curve.gif" %}' id="oImg" style='display:none' height="340px">#}
+{#                        <INPUT TYPE="button" value='开始学习' onclick="reP()">#}
+                        <h2 align="center">逻辑回归模型学习曲线</h2>
+                    <img src='{% static "media/learning_curve0.gif" %}'  align="left" height="400px">
+                    <img src='{% static "media/learn_curve/lc0/learning_curve19.png" %}'  align="right" height="400px">
+
+
+
+ -->
+
+                    </div>
+                </form>
+            </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+</html>

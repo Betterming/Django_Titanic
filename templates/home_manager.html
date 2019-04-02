@@ -1,0 +1,93 @@
+{% extends 'base_home2.html'%}
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+{% block title %}主页{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <style></style>
+    <script src="{% static 'js/jquery-3.2.1/jquery-3.2.1.js' %}"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+
+    <div class="container">
+       <div class="panel panel-default">
+            <div class="panel-heading">
+                用户管理
+             </div>
+            <div class="panel-body">
+                <form class='form-manager' action="/home_manager/" method="post">
+                <button type="submit" name="add"   class="btn btn-primary btn-xs">添加用户信息</button>
+                <!-- 模态框（Modal） -->
+                <button type="submit" name="find"  class="btn btn-primary btn-xs">查询用户信息</button>
+                <!-- 模态框（Modal） -->
+                </form>
+            </div>
+       </div>
+
+       <div class="panel panel-default">
+            <div class="panel-heading">
+                数据集管理
+            </div>
+            <div class="panel-body">
+                <label>上传新的数据集:</label>
+                <form action="/home_manager_file/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="txt_file">
+                    <br>
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </form>
+                <br>
+                <br>
+                <label>删除数据集：</label>
+                <table class="table table-bordered">
+                <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item }}<button type="submit" name="del" class="btn btn-primary pull-right">删除</button></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+       </div>
+
+       <div class="panel panel-default">
+            <div class="panel-heading">
+                模型管理
+            </div>
+            <div class="panel-body">
+            <label>上传新的模型:</label>
+                <form action="/home_manager_model/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="model">
+                    <br>
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </form>
+                <br>
+                <br>
+                <label>删除模型：</label>
+                <table class="table table-bordered">
+                <tbody>
+                {% for item in model %}
+                <tr>
+                    <td>{{ item }}<button type="submit" name="del" class="btn btn-primary pull-right">删除</button></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+       </div>
+
+
+
+
+    </div> <!-- /container -->
+
+{% endblock %}
+

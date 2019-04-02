@@ -1,0 +1,69 @@
+{% extends 'base_home2.html'%}
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<div lang="cy-CN" xmlns="http://www.w3.org/1999/html">
+{% block title %}主页{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <style></style>
+    <script src="{% static 'js/jquery-3.2.1/jquery-3.2.1.js' %}"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+
+    <div class="container"><form action="/home_manager_find/" method="post">
+           <div class="panel panel-default">
+                <div class="panel-heading"><button type="submit" name="return">用户管理</button>：查询用户信息</div></form>
+                    <div class="panel-body">
+                        <div class="modal-body">
+                            <form class='form-manager' action="/home_manager_find/" method="post">
+                            {% csrf_token %}
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" name='name' id="name" class="form-control" placeholder="用户名" onkeydown="onKeyDown(event)" required/>
+                                        <span  class="input-group-addon"></span>
+                                    <button type="submit" class="btn btn-primary pull-right">查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                            <table class="table table-striped"><br><br>
+                                <thead>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>密码</th>
+                                        <th>邮箱</th>
+                                        <th>用户类型</th>
+                                        <th>修改</th>
+                                        <th>删除</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for line in home_manager_find %}
+                                    <tr>
+                                        <form action="/delete/" method="post">
+                                        <td>{{ line.name }}</td>
+                                        <td>{{ line.pwd }}</td>
+                                        <td>{{ line.email }}</td>
+                                        <td>{{ line.type }}</td>
+                                        <td><button type="submit" name="upd">修改</button></td>
+                                        <td><button type="submit" name="del">删除</button></td>
+                                        </form>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+
+                    </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+    </div> <!-- /container -->
+
+{% endblock %}
